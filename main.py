@@ -1,11 +1,13 @@
 import logging
-
+import os
+from uuid import uuid4
 from aiogram import Bot, Dispatcher, executor, types
 
-API_TOKEN = 'token'
-GAME_NAME = 'wordle'
-GAME_URL = 'url'
+API_TOKEN = os.getenv('telegram_api_token_wordle')
 
+GAME_NAME = 'wordle'
+
+GAME_URL = 'http://51.250.17.140/'
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
@@ -26,19 +28,30 @@ async def send_welcome(message: types.Message):
     await bot.send_game(message.chat.id, game_short_name=GAME_NAME, reply_markup=keyboard)
 
 
+@dp.inline_handler()
+async def send_game(inline_query: types.InlineQuery):
+    await bot.answer_inline_query(inline_query.id,
+                                  [types.InlineQueryResultGame(id=str(uuid4()),
+                                                               game_short_name=GAME_NAME)])
+
+
 @dp.callback_query_handler(lambda message: message.game_short_name == GAME_NAME)
 async def process_callback_button1(callback_query: types.CallbackQuery):
-    print(callback_query.game_short_name)
-    await bot.answer_callback_query(callback_query.id, 'игра началась', url=GAME_URL)
+    # print(callback_query.game_short_name)
+    print(callback_query)
+    # print(callback_query.message)
+    user_url = GAME_URL + '?chat_id=%s&user_id=%d' % (callback_query.chat_instance, callback_query.from_user.id)
+    print(user_url)
+    await bot.answer_callback_query(callback_query.id, url=user_url)
 
 
 @dp.callback_query_handler(lambda c: c.data == 'help')
-async def process_callback_button1(callback_query: types.CallbackQuery):
+async def process_callback_button2(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id, 'Запустите по кнопке play')
 
 
 @dp.callback_query_handler(lambda c: c.data == 'rules')
-async def process_callback_button1(callback_query: types.CallbackQuery):
+async def process_callback_button3(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id, 'Рейтинг будет считаться так-то так-то.')
 
 
