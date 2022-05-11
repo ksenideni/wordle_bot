@@ -46,8 +46,8 @@ async def process_callback_button1(callback_query: types.CallbackQuery):
 
     # print(callback_query.game_short_name)
     print(callback_query)
-    # print(callback_query.message)
-    user_url = GAME_URL + '?chat_id=%s&user_id=%d' % (callback_query.chat_instance, callback_query.from_user.id)
+    print(callback_query.message)
+    user_url = GAME_URL + '?chat_id=%s&user_id=%d' % (callback_query.inline_message_id, callback_query.from_user.id)
     print(user_url)
     await bot.answer_callback_query(callback_query.id, url=user_url)
 
