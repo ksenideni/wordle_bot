@@ -1,5 +1,6 @@
 import logging
 import os
+import urllib
 from uuid import uuid4
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -8,7 +9,7 @@ from aiogram import Bot, Dispatcher, executor, types
 
 API_TOKEN = os.getenv('telegram_api_token_wordle')
 GAME_NAME = 'wordle'
-GAME_URL = 'http://51.250.17.140/'
+GAME_URL = urllib.request.urlopen("http://ifconfig.me.").read().decode('utf-8')
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
