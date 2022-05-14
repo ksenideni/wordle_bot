@@ -67,5 +67,8 @@ async def process_callback_button3(callback_query: types.CallbackQuery):
     await bot.answer_callback_query(callback_query.id, 'Рейтинг будет считаться так-то так-то.')
 
 
-if __name__ == '__main__':
+def start():
     executor.start_polling(dp, skip_updates=True)
+
+if __name__ == '__main__':
+    start()
